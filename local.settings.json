@@ -1,0 +1,21 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "WEBSITE_SLOT_NAME": "Production",
+    "FUNCTIONS_EXTENSION_VERSION": "~3",
+    "ScmType": "None",
+    "WEBSITE_AUTH_ENABLED": "False",
+    "WEBSITE_RUN_FROM_PACKAGE": "1",
+    "REMOTEDEBUGGINGVERSION": "16.0.28729.10",
+    "FUNCTIONS_RUNTIME_SCALE_MONITORING_ENABLED": "0",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "78781bd0-f4b1-494f-b275-75e55309f32e",
+    "WEBSITE_NODE_DEFAULT_VERSION": "14.16.0",
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "DefaultEndpointsProtocol=https;AccountName=flowplayermiddleware;AccountKey=RLsZXlPc7nLppRJ2v825DoTsErLOrGRdEnQM7Pr4ky+6MuJikmihvD6glv88z8XNM9IbH2oqzDREZm6J9yxAtA==;EndpointSuffix=core.windows.net",
+    "WEBSITE_CONTENTSHARE": "flowplayer-middlewared4731a",
+    "WEBSITE_AUTH_AUTO_AAD": "False",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "WEBSITE_SITE_NAME": "FlowPlayer-MiddleWare",
+    "WEBSITE_AUTH_LOGOUT_PATH": "/.auth/logout",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=flowplayermiddleware;AccountKey=RLsZXlPc7nLppRJ2v825DoTsErLOrGRdEnQM7Pr4ky+6MuJikmihvD6glv88z8XNM9IbH2oqzDREZm6J9yxAtA==;EndpointSuffix=core.windows.net"
+  }
+}

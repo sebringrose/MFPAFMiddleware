@@ -6,28 +6,29 @@ module.exports = async function (context, req) {
 
     const name = req.query.name
     const pageSize = req.query.pageSize
-    const response = await axios.get(`https://api.flowplayer.com/ovp/web/video/v2/site/${siteId}.json?api_key=${apiKey}&search=${name}&page_size=${pageSize ? pageSize : "200"}&published=true`)
-    
-    const videos = response.data.videos
-    const duration = req.query.duration
     const tags = req.query.tags ? req.query.tags.split(",") : false
-    let filteredVideos
 
-    if (name) {
-        // name provided - return search result
-        filteredVideos = videos
-    } else {
-        filteredVideos = duration || tags 
-            // duration or tag query params present so filters are required
-            ? videos.filter(video => duration && tags 
-                // if we need to filter for duration AND tags
-                ? video.duration < duration && tags.every(tag => video.tags.includes(tag)) 
-                // if we need to filter for duration OR tags
-                : (duration && video.duration < duration) || (tags && tags.every(tag => video.tags.includes(tag)))) 
-            // no query params to filter by so return all videos
-            : videos
+    // make custom flowplayer request (using API v2)
+    let response
+    try {
+        response = await axios.get(
+            `https://api.flowplayer.com/ovp/web/video/v2/site/${siteId}.json?api_key=${apiKey}${name ? `&search=${name}` : ""}&page_size=${pageSize && !tags ? pageSize : "200"}&published=true`
+        )
+    } catch(e) {
+        return console.log(e)
     }
-     
+    const videos = response.data.videos
+
+    // filter response data
+    let filteredVideos = videos
+
+    if (tags) {
+        // tag query param present so filter is required
+        filteredVideos = videos.filter(video => tags.every(tag => video.tags.includes(tag)))
+        // pageSize isn't used in query with tags as it would reduce results before filtering by tags
+        // therefore we slice the array here instead
+        filteredVideos = filteredVideos.slice(0, pageSize)
+    }
 
     context.res = {
         // status: 200, /* Defaults to 200 */

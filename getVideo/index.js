@@ -25,6 +25,10 @@ module.exports = async function (context, req) {
     if (tags) {
         // tag query param present so filter is required
         filteredVideos = videos.filter(video => tags.every(tag => video.tags.includes(tag)))
+
+        // return only films if no film_trailer tag present
+        const trailerString = " Trailer"
+        if (!tags.includes("film_trailer")) filteredVideos = filteredVideos.filter(video => !video.name.includes(trailerString))
         
         // pageSize isn't used in query with tags as it would reduce results before filtering by tags
         // therefore we slice the array here instead

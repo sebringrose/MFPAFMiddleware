@@ -6,13 +6,13 @@ module.exports = async function (context, req) {
 
     const name = req.query.name
     const pageSize = req.query.pageSize
-    const tags = req.query.tags ? req.query.tags.split(",") : false
+    const tags = req.query.tags ? req.query.tags.split(",") : []
 
     // make custom flowplayer request (using API v2)
     let response
     try {
         response = await axios.get(
-            `https://api.flowplayer.com/ovp/web/video/v2/site/${siteId}.json?api_key=${apiKey}${name ? `&search=${name}` : ""}&page_size=${pageSize && !tags ? pageSize : "200"}&published=true`
+            `https://api.flowplayer.com/ovp/web/video/v2/site/${siteId}.json?api_key=${apiKey}${name ? `&search=${name}` : ""}&page_size=${pageSize && !tags[0] ? pageSize : "200"}&published=true`
         )
     } catch(e) {
         return console.log(e)
@@ -24,12 +24,12 @@ module.exports = async function (context, req) {
 
     // return only films if no film_trailer tag present
     const trailerString = " Trailer"
-    if (!tags || !tags.includes("film_trailer")) filteredVideos = filteredVideos.filter(video => !video.name.includes(trailerString))
+    if (!tags[0] || !tags.some(tag => tag === "film_trailer")) filteredVideos = filteredVideos.filter(video => !video.name.includes(trailerString))
 
     // enter tag filtering land
     if (tags) {
         // tag query param present so filter is required
-        filteredVideos = videos.filter(video => tags.every(tag => video.tags.includes(tag)))
+        filteredVideos = filteredVideos.filter(video => tags.every(tag => video.tags.includes(tag)))
         
         // pageSize isn't used in query with tags as it would reduce results before filtering by tags
         // therefore we slice the array here instead

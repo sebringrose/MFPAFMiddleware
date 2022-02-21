@@ -9,15 +9,27 @@ module.exports = async function (context, req) {
     const tags = req.query.tags ? req.query.tags.split(",") : []
 
     // make custom flowplayer request (using API v2)
-    let response
-    try {
-        response = await axios.get(
-            `https://api.flowplayer.com/ovp/web/video/v2/site/${siteId}.json?api_key=${apiKey}${name ? `&search=${name}` : ""}&page_size=${pageSize && !tags[0] ? pageSize : "200"}&published=true`
-        )
-    } catch(e) {
-        return console.log(e)
+    const videos = []
+    let paginating = true
+    let page = 1
+    while (paginating) {
+        let response
+        try {
+            response = await axios.get(
+                `https://api.flowplayer.com/ovp/web/video/v2/site/${siteId}.json?api_key=${apiKey}${name ? `&search=${name}` : ""}&page=${page}&page_size=${pageSize && !tags[0] ? pageSize : "200"}&published=true`
+            )
+        } catch(e) {
+            return console.log(e)
+        }
+
+        videos.push(response.data.videos)
+
+        if (response.data.videos.length < 200) {
+            paginating = false
+        } else {
+            page = page+1
+        }
     }
-    const videos = response.data.videos
 
     // filter response data
     let filteredVideos = videos
